@@ -1,0 +1,525 @@
+/* =========================================
+   1. RESET & BIẾN MÔI TRƯỜNG (VARIABLES)
+========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    /* Box Model chuẩn: Đảm bảo border và padding không làm phình kích thước khối */
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-red: #e50914; /* Màu đỏ chủ đạo kiểu rạp phim */
+    --bg-dark: #141414;     /* Nền tối */
+    --text-light: #f5f5f5;  /* Chữ trắng */
+    --card-bg: #2b2b2b;     /* Nền của thẻ phim */
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ép body cao tối thiểu bằng màn hình để đẩy footer xuống đáy */
+}
+
+/* =========================================
+   2. SELECTORS CHO HEADER & MENU
+========================================= */
+header {
+    background-color: #000;
+    padding: 15px 40px;
+    display: flex;            /* Dùng Flexbox để dàn hàng ngang */
+    justify-content: space-between; /* Đẩy Logo sang trái, Menu sang phải */
+    align-items: center;
+    border-bottom: 2px solid var(--primary-red);
+}
+
+header h2 {
+    color: var(--primary-red);
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+nav a {
+    color: var(--text-light);
+    text-decoration: none;
+    margin-left: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: color 0.3s ease; /* Hiệu ứng chuyển màu mượt mà */
+}
+
+/* Hiệu ứng khi di chuột vào link menu */
+nav a:hover {
+    color: var(--primary-red);
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Nút Phim trên thanh Nav */
+.dropbtn {
+    text-decoration: none;
+    color: white;
+    padding: 15px 20px;
+}
+
+/* Cấu hình cái hộp menu xổ xuống */
+.dropdown-content {
+    display: none; /* Mặc định là ẨN */
+    position: absolute;
+    background-color: #222; /* Màu xám đen giống CGV */
+    min-width: 250px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
+    z-index: 1000; /* Đẩy nó lên lớp trên cùng để không bị chữ ở dưới đè lên */
+    top: 100%; /* Canh sát mép dưới của chữ PHIM */
+    border: 1px solid #444; /* Viền mỏng cho đẹp */
+}
+
+/* Định dạng các link bên trong hộp */
+.dropdown-content a {
+    color: #fff;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    margin-left: 0;
+    border-bottom: 1px solid #333; /* Đường gạch ngang phân cách các dòng */
+    transition: 0.2s; /* Hiệu ứng chuyển màu mượt */
+}
+
+/* Xóa gạch dưới ở dòng cuối cùng cho đỡ vướng */
+.dropdown-content a:last-child {
+    border-bottom: none;
+}
+
+/* TRỌNG TÂM: Khi chuột rẽ vào chữ PHIM thì đổi display thành block để HIỆN hộp lên */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Khi chuột rẽ vào các dòng menu con thì đổi màu nền thành Đỏ PTIT */
+.dropdown-content a:hover {
+    background-color: #e50914;
+    color: white;
+}
+
+/* =========================================
+   3. PHẦN NỘI DUNG CHÍNH (MAIN)
+========================================= */
+main {
+    flex: 1; /* Chiếm toàn bộ không gian còn lại giữa header và footer */
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto; /* Căn giữa trang */
+    width: 100%;
+}
+
+main h2 {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    border-left: 5px solid var(--primary-red);
+    padding-left: 10px;
+}
+
+/* =========================================
+   4. THIẾT KẾ DANH SÁCH PHIM (MOVIE CARDS)
+========================================= */
+.movie-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+}
+
+.movie-card {
+    background-color: var(--card-bg);
+    width: calc(25% - 19px); /* Chia 4 cột */
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hiệu ứng nổi lên khi hover vào thẻ phim */
+.movie-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(229, 9, 20, 0.3);
+}
+
+.movie-poster {
+    width: 100%;
+    height: 350px;
+    object-fit: cover; /* Cắt ảnh chuẩn tỷ lệ, không bị méo */
+}
+
+.movie-info {
+    padding: 15px;
+    text-align: center;
+}
+
+.movie-info h4 {
+    margin-bottom: 5px;
+    font-size: 18px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Nếu tên phim dài quá sẽ hiện dấu ... */
+}
+
+.movie-info p {
+    color: #aaa;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+/* Nút đặt vé */
+.btn-book {
+    display: inline-block;
+    background-color: var(--primary-red);
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background 0.3s;
+    width: 100%;
+}
+
+.btn-book:hover {
+    background-color: #b20710; /* Đỏ sậm hơn khi hover */
+}
+
+.article-list {
+    display: flex;
+    flex-direction: column; /* Xếp chồng các bài viết theo chiều dọc */
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.article-card {
+    background-color: #1a1a1a; /* Màu nền card nhạt hơn nền web 1 tí */
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    border: 1px solid #333;
+}
+
+.article-card:hover {
+    transform: translateY(-5px); /* Bay lên một tí khi hover */
+    background-color: #252525;
+    border-color: #e50914; /* Viền đỏ khi chọn */
+}
+
+.article-link {
+    display: flex; /* Ảnh bên trái, chữ bên phải */
+    text-decoration: none;
+    color: inherit;
+}
+
+.article-image {
+    width: 240px; /* Độ rộng cố định cho ảnh thumbnail bài viết */
+    height: 150px;
+}
+
+.article-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Giữ ảnh không bị móp méo */
+}
+
+.article-content {
+    padding: 15px 20px;
+    flex: 1; /* Chiếm hết phần không gian còn lại */
+}
+
+.article-title {
+    color: #fff;
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+.article-card:hover .article-title {
+    color: #e50914; /* Tên bài viết đổi màu đỏ khi hover */
+}
+
+.article-summary {
+    color: #aaa;
+    font-size: 14px;
+    line-height: 1.6;
+    /* Giới hạn hiển thị 2 dòng mô tả cho gọn */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* =========================================
+   5. FOOTER
+========================================= */
+footer {
+    background-color: #000;
+    text-align: center;
+    padding: 20px;
+    font-size: 14px;
+    color: #777;
+    border-top: 1px solid #333;
+}
+
+/* --- CSS TRANG CHI TIẾT PHIM --- */
+.container-detail {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+    color: #fff;
+}
+
+.movie-hero {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 50px;
+}
+
+.movie-poster-large {
+    flex: 1;
+    max-width: 350px;
+}
+
+.movie-poster-large img {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border: 1px solid #333;
+}
+
+.movie-info-detail {
+    flex: 2;
+}
+
+.movie-title-large {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #e50914; /* Màu đỏ PTIT */
+    text-transform: uppercase;
+}
+
+.movie-meta {
+    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.badge {
+    background-color: #e50914;
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    width: fit-content;
+    font-weight: bold;
+}
+
+.info-item {
+    font-size: 1.1rem;
+    color: #ccc;
+}
+
+.movie-description h3 {
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.movie-description p {
+    line-height: 1.8;
+    color: #bbb;
+    text-align: justify;
+}
+
+.movie-actions {
+    margin-top: 30px;
+}
+
+.btn-booking {
+    display: inline-block;
+    background-color: #e50914;
+    color: white;
+    padding: 15px 40px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border-radius: 50px;
+    transition: 0.3s;
+}
+
+.btn-booking:hover {
+    background-color: #b20710;
+    transform: scale(1.05);
+}
+
+/* Trailer Section */
+.movie-trailer-section {
+    margin-top: 50px;
+}
+
+.section-title {
+    border-left: 5px solid #e50914;
+    padding-left: 15px;
+    margin-bottom: 20px;
+}
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* Tỉ lệ 16:9 */
+    height: 0;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* --- CSS CHO TRANG CHI TIẾT BÀI VIẾT --- */
+.article-detail-container {
+    max-width: 900px; /* Bóp nhỏ lại một chút cho chữ không bị dàn quá dài, dễ đọc hơn */
+    margin: 40px auto;
+    padding: 0 20px;
+    color: #e0e0e0; /* Chữ xám sáng trên nền đen */
+    font-family: Arial, sans-serif;
+}
+
+.btn-back {
+    display: inline-block;
+    color: #aaa;
+    text-decoration: none;
+    margin-bottom: 20px;
+    font-size: 15px;
+    transition: color 0.3s;
+}
+
+.btn-back:hover {
+    color: #e50914; /* Đỏ PTIT */
+}
+
+.article-main-title {
+    font-size: 2.8rem;
+    color: #fff;
+    margin-bottom: 15px;
+    line-height: 1.3;
+}
+
+.article-meta-info {
+    color: #888;
+    font-size: 14px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+}
+
+.article-hero-image {
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.article-hero-image img {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover; /* Đảm bảo ảnh không bị méo */
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+.article-full-content {
+    font-size: 1.15rem;
+    line-height: 1.8; /* Cực kỳ quan trọng để chữ không bị dính vào nhau */
+    color: #ccc;
+    text-align: justify;
+}
+
+/* Format mấy cái thẻ HTML bên trong content nếu ông dùng trình soạn thảo văn bản */
+.article-full-content p {
+    margin-bottom: 20px;
+}
+
+.article-full-content img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+/* --- CSS CHO TRANG DANH SÁCH PHIM (Có phân trang) --- */
+.movie-page-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.page-title {
+    color: #e50914; /* Đỏ rạp phim */
+    border-left: 5px solid #e50914;
+    padding-left: 15px;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    font-size: 2rem;
+}
+
+/* --- STYLE CHO NÚT PHÂN TRANG --- */
+.pagination-container {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.page-link {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background-color: #333;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.page-link:hover {
+    background-color: #555;
+}
+
+/* Nút của trang hiện tại sẽ sáng màu đỏ */
+.page-link.active {
+    background-color: #e50914;
+    color: white;
+    pointer-events: none; /* Đang ở trang nào thì không cho bấm lại trang đó */
+}
+
+.pagination-link.nav-btn {
+    background-color: #333; /* Nền xám đen mặc định */
+    color: white;
+    border: none; /* Bỏ viền cho phẳng */
+    padding: 10px 20px; /* Kéo dài 2 bên ra cho chữ đỡ chật */
+    border-radius: 10px; /* Bo góc xịn xò */
+    text-decoration: none; /* Xóa gạch chân màu xanh */
+    font-weight: 600;
+    margin: 0 10px; /* Cách xa mấy con số ra một tí */
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Hiệu ứng khi hover chuột vào nút Trước/Tiếp */
+.pagination-link.nav-btn:hover {
+    background-color: #e50914; /* Đỏ rực lên */
+    color: white;
+    transform: translateY(-2px); /* Nhảy lên nhẹ 1 cái */
+    box-shadow: 0 5px 15px rgba(229, 9, 20, 0.4);
+}

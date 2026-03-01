@@ -3,14 +3,14 @@ package model;
 import model.enums.TheatreStatus;
 
 public class Theatre {
-    private String theatre_id;
+    private int theatre_id;
     private String theatre_name;
     private String location;
     private String preview_url;
     private String info;
     private TheatreStatus theatre_status;
 
-    public Theatre(String theatre_id, String theatre_name, String location, String preview_url, String info, TheatreStatus theatre_status) {
+    public Theatre(int theatre_id, String theatre_name, String location, String preview_url, String info, TheatreStatus theatre_status) {
         this.theatre_id = theatre_id;
         this.theatre_name = theatre_name;
         this.location = location;
@@ -19,7 +19,7 @@ public class Theatre {
         this.theatre_status = theatre_status;
     }
 
-    public String getTheatre_id() {
+    public int getTheatre_id() {
         return theatre_id;
     }
 
@@ -43,7 +43,7 @@ public class Theatre {
         return theatre_status;
     }
 
-    public void setTheatre_id(String theatre_id) {
+    public void setTheatre_id(int theatre_id) {
         this.theatre_id = theatre_id;
     }
 

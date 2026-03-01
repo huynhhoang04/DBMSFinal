@@ -2,6 +2,8 @@ package model;
 
 import model.enums.MovieStatus;
 
+import java.time.LocalDate;
+
 public class Movie {
     private int movie_id;
     private String title;
@@ -10,10 +12,10 @@ public class Movie {
     private String trailer_url;
     private String genre;
     private int duration;
-    private String release_date;
+    private LocalDate release_date;
     private MovieStatus movie_status;
 
-    public Movie(int movie_id, String title, String description, String poster_url, String trailer_url, String genre, int duration, String release_date, MovieStatus movie_status) {
+    public Movie(int movie_id, String title, String description, String poster_url, String trailer_url, String genre, int duration, LocalDate release_date, MovieStatus movie_status) {
         this.movie_id = movie_id;
         this.title = title;
         this.description = description;
@@ -53,7 +55,7 @@ public class Movie {
         return duration;
     }
 
-    public String getRelease_date() {
+    public LocalDate getRelease_date() {
         return release_date;
     }
 
@@ -89,7 +91,7 @@ public class Movie {
         this.duration = duration;
     }
 
-    public void setRelease_date(String release_date) {
+    public void setRelease_date(LocalDate release_date) {
         this.release_date = release_date;
     }
 
