@@ -1,10 +1,10 @@
-package controller;
+package main.java.controller;
 
-import dao.MovieDAO;
-import dao.impl.MovieDAOImpl;
-import dto.MovieThumnailDTO;
-import service.MovieServices;
-import service.impl.MovieServiesImpl;
+import main.java.dao.MovieDAO;
+import main.java.dao.impl.MovieDAOImpl;
+import main.java.dto.MovieThumnailDTO;
+import main.java.service.MovieServices;
+import main.java.service.impl.MovieServiesImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,13 +29,18 @@ public class Movie extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
         try {
             String status = request.getParameter("status");
             String pageRaw = request.getParameter("page");
+            String keywordRaw = request.getParameter("keyword");
+            String tagRaw = request.getParameter("tag");
             if(pageRaw != null && !pageRaw.isEmpty() && status != null && !status.isEmpty()){
                 int page = Integer.parseInt(pageRaw);
-                List<MovieThumnailDTO> movies = movieServices.getMovieByStatusAndPage(status, page);
-                int totalMovie = movieServices.countMovieByStatus(status);
+                List<MovieThumnailDTO> movies = movieServices.getMovieByStatusAndPage(status, page, keywordRaw, tagRaw);
+                int totalMovie = movieServices.countMovieByStatus(status, keywordRaw, tagRaw);
                 int totalPage;
                 if(totalMovie % 8 ==0){totalPage = totalMovie / 8;}
                 else{totalPage = totalMovie / 8 + 1;}

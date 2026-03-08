@@ -1,7 +1,7 @@
 create table users
 (
     user_id   serial,
-    username  varchar(50)         not null,
+    username  varchar(50)  unique not null,
     password  varchar(100)        not null,
     full_name varchar(100),
     email     varchar(100) unique not null,
@@ -29,7 +29,9 @@ create table theatre
 (
     theatre_id     serial,
     theatre_name   varchar(100) not null,
+    city           varchar(50)  not null,
     location       varchar(100) not null,
+    coordinates    varchar(100) not null,
     preview_url    varchar(255) not null,
     info           text,
     theatre_status varchar(100) not null check ( theatre_status in ('MAINTENANCE', 'OPEN', 'CLOSE') ),

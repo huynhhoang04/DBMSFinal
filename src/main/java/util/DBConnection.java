@@ -1,5 +1,6 @@
-package util;
+package main.java.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -11,7 +12,9 @@ public class DBConnection {
 
     public static Connection getConnection() throws SQLException {
         Connection conn = null;
+        System.out.println("Current Path: " + new File(".").getAbsolutePath());
         try (InputStream is = DBConnection.class.getClassLoader().getResourceAsStream("dbconfig.properties")) {
+            System.out.println(is);
             Class.forName("org.postgresql.Driver");
             Properties prop = new Properties();
             prop.load(is);
