@@ -117,13 +117,66 @@
     <div class="history-card">
         <h2 class="history-title">🎬 Lịch sử đặt vé</h2>
 
-        <div class="empty-history">
-            <span>🎟️</span>
-            <p>Bạn chưa có giao dịch nào.</p>
-            <a href="${pageContext.request.contextPath}/movies" style="color: #e50914; text-decoration: none; font-weight: bold;">
-                Khám phá phim đang chiếu ngay!
-            </a>
-        </div>
+        <c:if test="${empty historyList}">
+            <div class="empty-history">
+                <span>🎟️</span>
+                <p>Bạn chưa có giao dịch nào.</p>
+                <a href="${pageContext.request.contextPath}/movie" style="color: #e50914; text-decoration: none; font-weight: bold;">
+                    Khám phá phim đang chiếu ngay!
+                </a>
+            </div>
+        </c:if>
+
+        <c:if test="${not empty historyList}">
+            <div class="history-list" style="display: flex; flex-direction: column; gap: 20px;">
+                <c:forEach var="bk" items="${historyList}">
+                    <div style="background: #2a2a2a; border-radius: 8px; padding: 20px; border-left: 5px solid
+                    <c:choose>
+                    <c:when test="${bk.paymentStatus == 'COMPLETED'}">#28a745</c:when>
+                    <c:when test="${bk.paymentStatus == 'PENDING'}">#ffc107</c:when>
+                    <c:otherwise>#dc3545</c:otherwise>
+                    </c:choose>;">
+
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #444; padding-bottom: 10px; margin-bottom: 15px;">
+                            <h3 style="margin: 0; font-size: 1.3rem;">${bk.movieTitle}</h3>
+                            <span style="font-size: 0.9rem; color: #aaa;">Mã HĐ: #${bk.bookingId}</span>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+                            <div style="flex: 2; line-height: 1.8; color: #ccc;">
+                                <div>📅 Thời gian chiếu: <strong>${bk.showTime}</strong></div>
+                                <div>🏠 Phòng chiếu: <strong>${bk.roomName}</strong></div>
+                                <div>💺 Ghế đã chọn: <strong style="color: #e50914;">${bk.seats}</strong></div>
+                            </div>
+
+                            <div style="flex: 1; text-align: right; border-left: 1px solid #444; padding-left: 20px;">
+                                <div style="font-size: 1.2rem; font-weight: bold; color: #fff; margin-bottom: 10px;">
+                                    <fmt:formatNumber value="${bk.totalPayment}" pattern="#,###"/> VNĐ
+                                </div>
+
+                                <c:choose>
+                                    <c:when test="${bk.paymentStatus == 'PENDING'}">
+                                        <div style="color: #ffc107; font-weight: bold; margin-bottom: 10px;">Chờ thanh toán</div>
+                                        <a href="${pageContext.request.contextPath}/pay?id=${bk.bookingId}" style="display: inline-block; background: #28a745; color: white; padding: 6px 15px; text-decoration: none; border-radius: 4px; font-size: 0.9rem; margin-bottom: 5px;">Thanh toán ngay</a>
+                                        <form action="${pageContext.request.contextPath}/profile" method="post" style="display: inline;">
+                                            <input type="hidden" name="action" value="cancel_booking">
+                                            <input type="hidden" name="booking_id" value="${bk.bookingId}">
+                                            <button type="submit" onclick="return confirm('Hủy vé sẽ mất chỗ. Bạn chắc chắn chứ?');" style="background: transparent; color: #dc3545; border: 1px solid #dc3545; padding: 5px 15px; border-radius: 4px; cursor: pointer;">Hủy</button>
+                                        </form>
+                                    </c:when>
+                                    <c:when test="${bk.paymentStatus == 'COMPLETED'}">
+                                        <span style="background: #28a745; color: white; padding: 5px 10px; border-radius: 4px; font-size: 0.9rem;">Thành công</span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span style="background: #555; color: #aaa; padding: 5px 10px; border-radius: 4px; font-size: 0.9rem;">Đã hủy</span>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                        </div>
+                    </div>
+                </c:forEach>
+            </div>
+        </c:if>
     </div>
 
 </div>

@@ -1,12 +1,16 @@
 package main.java.dao.impl;
 
 import main.java.dao.UserDAO;
+import main.java.dto.BookingHistoryDTO;
 import main.java.mapper.UserMaapper;
 import main.java.model.entity.User;
+import main.java.model.enums.PaymentStatus;
 import org.mindrot.jbcrypt.BCrypt;
 import main.java.util.DBConnection;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAOImpl implements UserDAO {
     @Override
@@ -94,5 +98,47 @@ public class UserDAOImpl implements UserDAO {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public List<BookingHistoryDTO> getBookingHistory(int userId) {
+        List<BookingHistoryDTO> list = new ArrayList<>();
+
+        String sql = "SELECT b.booking_id, b.booking_date, b.total_payment, b.payment_status, " +
+                "m.title AS movie_title, s.start_at, r.room_name, " +
+                "STRING_AGG(t.seat_number, ', ') AS seats " +
+                "FROM bookings b " +
+                "JOIN tickets t ON b.booking_id = t.booking_id " +
+                "JOIN showtime s ON t.showtime_id = s.showtime_id " +
+                "JOIN movies m ON s.movie_id = m.movie_id " +
+                "JOIN room r ON s.room_id = r.room_id " +
+                "WHERE b.user_id = ? " +
+                "GROUP BY b.booking_id, b.booking_date, b.total_payment, b.payment_status, " +
+                "m.title, s.start_at, r.room_name " +
+                "ORDER BY b.booking_date DESC";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                BookingHistoryDTO dto = new BookingHistoryDTO();
+                dto.setBookingId(rs.getInt("booking_id"));
+                dto.setBookingDate(rs.getTimestamp("booking_date"));
+                dto.setTotalPayment(rs.getDouble("total_payment"));
+                dto.setPaymentStatus(PaymentStatus.valueOf(rs.getString("payment_status")));
+                dto.setMovieTitle(rs.getString("movie_title"));
+                dto.setShowTime(rs.getString("start_at"));
+                dto.setRoomName(rs.getString("room_name"));
+                dto.setSeats(rs.getString("seats"));
+
+                list.add(dto);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 }

@@ -2,6 +2,7 @@ package main.java.controller;
 
 import main.java.dao.UserDAO;
 import main.java.dao.impl.UserDAOImpl;
+import main.java.dto.BookingHistoryDTO;
 import main.java.model.entity.User;
 import main.java.service.UserServices;
 import main.java.service.impl.UserServicesImpl;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(name = "Profile", value = "/profile")
 public class Profile extends HttpServlet {
@@ -31,6 +33,8 @@ public class Profile extends HttpServlet {
             HttpSession session = request.getSession();
             User currentUser = (User) session.getAttribute("currentUser");
             session.setAttribute("currentUser", currentUser);
+            List<BookingHistoryDTO> historyList = userServices.getBookingHistory(currentUser.getUser_id());
+            request.setAttribute("historyList", historyList);
             request.getRequestDispatcher("/views/user/profile.jsp").forward(request, response);
         }catch(Exception e){
             e.printStackTrace();

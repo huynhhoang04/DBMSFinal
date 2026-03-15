@@ -14,6 +14,6 @@
     <p style="margin: 5px 0;">Liên hệ: huynh696k@gmail.com | SĐT: 0867.994.416</p>
 </footer>
 
-<script src="${pageContext.request.contextPath}/assets/js/main.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/main.js?v=1"></script>
 </body>
 </html>

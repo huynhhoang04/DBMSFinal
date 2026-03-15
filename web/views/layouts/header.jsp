@@ -12,7 +12,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Cinema</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css?v=1">
 </head>
 <body>
 <header>
@@ -29,7 +29,7 @@
         </div>
         <a href="${pageContext.request.contextPath}/theatre">Rạp Phim</a>
         <div class="header-auth-section"> <c:choose>
-                <%-- TRƯỜNG HỢP 1: ĐÃ ĐĂNG NHẬP (Biến currentUser trong session không bị rỗng) --%>
+                <%-- ĐÃ ĐĂNG NHẬP --%>
             <c:when test="${not empty sessionScope.currentUser}">
 
             <div class="user-menu" style="display: flex; gap: 15px; align-items: center;">
@@ -45,7 +45,7 @@
 
             </c:when>
 
-                <%-- TRƯỜNG HỢP 2: CHƯA ĐĂNG NHẬP --%>
+                <%-- CHƯA ĐĂNG NHẬP --%>
             <c:otherwise>
 
             <a href="${pageContext.request.contextPath}/auth?action=login" style="color: white; text-decoration: none;">Đăng Nhập/Đăng Ký</a>

@@ -1,10 +1,13 @@
 package main.java.service.impl;
 
 import main.java.dao.UserDAO;
+import main.java.dto.BookingHistoryDTO;
 import main.java.model.entity.User;
 import main.java.model.enums.Role;
 import org.mindrot.jbcrypt.BCrypt;
 import main.java.service.UserServices;
+
+import java.util.List;
 
 public class UserServicesImpl implements UserServices {
     private UserDAO userDAO;
@@ -56,5 +59,10 @@ public class UserServicesImpl implements UserServices {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public List<BookingHistoryDTO> getBookingHistory(int userId) {
+        return userDAO.getBookingHistory(userId);
     }
 }
