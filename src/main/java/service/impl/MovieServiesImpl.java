@@ -20,32 +20,57 @@ public class MovieServiesImpl implements MovieServices {
     public List<MovieThumnailDTO> getTop7NewestMovies() {
         List<Movie> movies = movieDAO.getTop7NewestMovies();
         List<MovieThumnailDTO> dtos = new ArrayList<>();
-        movies.forEach(movie -> {
-            dtos.add(new MovieThumnailDTO(movie.getMovie_id(), movie.getTitle(), movie.getPoster_url(), movie.getDuration()));
-        });
+
+        // Bọc lót an toàn tránh NullPointerException
+        if (movies != null) {
+            movies.forEach(movie -> {
+                dtos.add(new MovieThumnailDTO(movie.getMovieId(), movie.getTitle(), movie.getPosterUrl(), movie.getDuration()));
+            });
+        }
         return dtos;
     }
 
     @Override
     public MovieDetailDTO getMovieById(int id) {
         Movie movie = movieDAO.getMovieById(id);
-        MovieDetailDTO movieDetailDTO = new MovieDetailDTO(movie.getMovie_id(), movie.getTitle(), movie.getDescription(), movie.getPoster_url(), movie.getTrailer_url(), movie.getGenre(), movie.getDuration(), movie.getRelease_date());
-        return movieDetailDTO;
+
+        if (movie != null) {
+            MovieDetailDTO movieDetailDTO = new MovieDetailDTO(
+                    movie.getMovieId(),
+                    movie.getTitle(),
+                    movie.getDescription(),
+                    movie.getPosterUrl(),
+                    movie.getTrailerUrl(),
+                    movie.getGenre(),
+                    movie.getDuration(),
+                    movie.getReleaseDate() != null ? movie.getReleaseDate().toLocalDate() : null,
+                    movie.getSeriesName(),
+                    movie.getDirectors(),
+                    movie.getActors()
+            ); return movieDetailDTO;
+        }
+        return null;
     }
 
     @Override
     public List<MovieThumnailDTO> getMovieByStatusAndPage(String statusRaw, int pageRaw,  String keywordRaw, String tagRaw) {
         int pageSize = 8;
-        int offset = (pageRaw - 1) * pageSize;
+
+        // ĐÃ XÓA DÒNG TÍNH OFFSET BỊ TRÙNG LẶP Ở ĐÂY
+
         String status = statusRaw.toUpperCase();
         String keyword = (keywordRaw == null) ? "" : keywordRaw.trim();
         String tag = (tagRaw == null) ? "" : tagRaw.trim();
 
-        List<Movie> movies = movieDAO.getMovieByStatusAndPage(status, offset, pageSize, keyword, tag);
+        // Truyền thẳng pageRaw xuống DAO
+        List<Movie> movies = movieDAO.getMovieByStatusAndPage(status, pageRaw, pageSize, keyword, tag);
         List<MovieThumnailDTO> dtos = new ArrayList<>();
-        movies.forEach(movie -> {
-            dtos.add(new MovieThumnailDTO(movie.getMovie_id(), movie.getTitle(), movie.getPoster_url(), movie.getDuration()));
-        });
+
+        if (movies != null) {
+            movies.forEach(movie -> {
+                dtos.add(new MovieThumnailDTO(movie.getMovieId(), movie.getTitle(), movie.getPosterUrl(), movie.getDuration()));
+            });
+        }
         return dtos;
     }
 

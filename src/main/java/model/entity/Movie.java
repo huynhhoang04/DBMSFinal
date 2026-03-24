@@ -1,34 +1,43 @@
 package main.java.model.entity;
 
 import main.java.model.enums.MovieStatus;
-
-import java.time.LocalDate;
+import java.sql.Date;
 
 public class Movie {
-    private int movie_id;
+    private int movieId;
     private String title;
     private String description;
-    private String poster_url;
-    private String trailer_url;
-    private String genre;
+    private String posterUrl;
+    private String trailerUrl;
     private int duration;
-    private LocalDate release_date;
-    private MovieStatus movie_status;
+    private Date releaseDate;
+    private MovieStatus movieStatus;
+    private Integer seriesId;
+    private String genre;
+    private String seriesName;
+    private String directors;
+    private String actors;
 
-    public Movie(int movie_id, String title, String description, String poster_url, String trailer_url, String genre, int duration, LocalDate release_date, MovieStatus movie_status) {
-        this.movie_id = movie_id;
-        this.title = title;
-        this.description = description;
-        this.poster_url = poster_url;
-        this.trailer_url = trailer_url;
-        this.genre = genre;
-        this.duration = duration;
-        this.release_date = release_date;
-        this.movie_status = movie_status;
+    public Movie() {
     }
 
-    public int getMovie_id() {
-        return movie_id;
+    public Movie(int movieId, String title, String description, String posterUrl,
+                 String trailerUrl, int duration, Date releaseDate,
+                 MovieStatus movieStatus, Integer seriesId, String genre) {
+        this.movieId = movieId;
+        this.title = title;
+        this.description = description;
+        this.posterUrl = posterUrl;
+        this.trailerUrl = trailerUrl;
+        this.duration = duration;
+        this.releaseDate = releaseDate;
+        this.movieStatus = movieStatus;
+        this.seriesId = seriesId;
+        this.genre = genre;
+    }
+
+    public int getMovieId() {
+        return movieId;
     }
 
     public String getTitle() {
@@ -39,32 +48,36 @@ public class Movie {
         return description;
     }
 
-    public String getPoster_url() {
-        return poster_url;
+    public String getPosterUrl() {
+        return posterUrl;
     }
 
-    public String getTrailer_url() {
-        return trailer_url;
-    }
-
-    public String getGenre() {
-        return genre;
+    public String getTrailerUrl() {
+        return trailerUrl;
     }
 
     public int getDuration() {
         return duration;
     }
 
-    public LocalDate getRelease_date() {
-        return release_date;
+    public Date getReleaseDate() {
+        return releaseDate;
     }
 
-    public MovieStatus getMovie_status() {
-        return movie_status;
+    public MovieStatus getMovieStatus() {
+        return movieStatus;
     }
 
-    public void setMovie_id(int movie_id) {
-        this.movie_id = movie_id;
+    public Integer getSeriesId() {
+        return seriesId;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setMovieId(int movieId) {
+        this.movieId = movieId;
     }
 
     public void setTitle(String title) {
@@ -75,27 +88,55 @@ public class Movie {
         this.description = description;
     }
 
-    public void setPoster_url(String poster_url) {
-        this.poster_url = poster_url;
+    public void setPosterUrl(String posterUrl) {
+        this.posterUrl = posterUrl;
     }
 
-    public void setTrailer_url(String trailer_url) {
-        this.trailer_url = trailer_url;
-    }
-
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public void setTrailerUrl(String trailerUrl) {
+        this.trailerUrl = trailerUrl;
     }
 
     public void setDuration(int duration) {
         this.duration = duration;
     }
 
-    public void setRelease_date(LocalDate release_date) {
-        this.release_date = release_date;
+    public void setReleaseDate(Date releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
-    public void setMovie_status(MovieStatus movie_status) {
-        this.movie_status = movie_status;
+    public void setMovieStatus(MovieStatus movieStatus) {
+        this.movieStatus = movieStatus;
+    }
+
+    public void setSeriesId(Integer seriesId) {
+        this.seriesId = seriesId;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public String getSeriesName() {
+        return seriesName;
+    }
+
+    public String getDirectors() {
+        return directors;
+    }
+
+    public String getActors() {
+        return actors;
+    }
+
+    public void setSeriesName(String seriesName) {
+        this.seriesName = seriesName;
+    }
+
+    public void setDirectors(String directors) {
+        this.directors = directors;
+    }
+
+    public void setActors(String actors) {
+        this.actors = actors;
     }
 }

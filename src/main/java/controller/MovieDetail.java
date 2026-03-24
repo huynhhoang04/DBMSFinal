@@ -33,19 +33,20 @@ public class MovieDetail extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request,  HttpServletResponse response) throws ServletException, IOException {
+        String idRaw = request.getParameter("id");
+
+        if (idRaw == null || idRaw.isEmpty()) {
+            response.sendRedirect(request.getContextPath() + "/home");
+            return;
+        }
+
         try {
-            String idRaw = request.getParameter("id");
+            int movieId = Integer.parseInt(idRaw);
+            MovieDetailDTO movie = movieServices.getMovieById(movieId);
 
-            if (idRaw != null && !idRaw.isEmpty()) {
-                int movieId = Integer.parseInt(idRaw);
-                MovieDetailDTO movie = movieServices.getMovieById(movieId);
-
-                if (movie != null) {
-                    request.setAttribute("movie", movie);
-                    request.getRequestDispatcher("/views/movie-detail.jsp").forward(request, response);
-                } else {
-                    response.sendRedirect(request.getContextPath() + "/home");
-                }
+            if (movie != null) {
+                request.setAttribute("movie", movie);
+                request.getRequestDispatcher("/views/movie-detail.jsp").forward(request, response);
             } else {
                 response.sendRedirect(request.getContextPath() + "/home");
             }

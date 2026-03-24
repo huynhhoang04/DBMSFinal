@@ -12,8 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "Movie", value = "/movie")
@@ -23,7 +21,6 @@ public class Movie extends HttpServlet {
     @Override
     public void init() {
         MovieDAO movieDAO = new MovieDAOImpl();
-
         this.movieServices = new MovieServiesImpl(movieDAO);
     }
 
@@ -32,28 +29,43 @@ public class Movie extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
+
         try {
             String status = request.getParameter("status");
             String pageRaw = request.getParameter("page");
             String keywordRaw = request.getParameter("keyword");
             String tagRaw = request.getParameter("tag");
-            if(pageRaw != null && !pageRaw.isEmpty() && status != null && !status.isEmpty()){
-                int page = Integer.parseInt(pageRaw);
-                List<MovieThumnailDTO> movies = movieServices.getMovieByStatusAndPage(status, page, keywordRaw, tagRaw);
-                int totalMovie = movieServices.countMovieByStatus(status, keywordRaw, tagRaw);
-                int totalPage;
-                if(totalMovie % 8 ==0){totalPage = totalMovie / 8;}
-                else{totalPage = totalMovie / 8 + 1;}
-                if(!movies.isEmpty()){
-                    request.setAttribute("movies", movies);
-                    request.setAttribute("totalPage", totalPage);
-                    request.getRequestDispatcher("/views/movie.jsp").forward(request, response);
-                }
-                else {
-                    response.sendRedirect(request.getContextPath() + "/home");
-                }
+
+            // XỬ LÝ MẶC ĐỊNH AN TOÀN
+            if (status == null || status.isEmpty()) {
+                status = "AVAILABLE"; // Mặc định là phim đang chiếu
             }
-        } catch (NullPointerException e ) {
+            int page = 1; // Mặc định là trang 1
+            if (pageRaw != null && !pageRaw.isEmpty()) {
+                page = Integer.parseInt(pageRaw);
+            }
+
+            // Gọi Service lấy dữ liệu
+            List<MovieThumnailDTO> movies = movieServices.getMovieByStatusAndPage(status, page, keywordRaw, tagRaw);
+            int totalMovie = movieServices.countMovieByStatus(status, keywordRaw, tagRaw);
+
+            // Tính số trang nhanh gọn bằng Math.ceil
+            int totalPage = (int) Math.ceil((double) totalMovie / 8);
+
+            // Gửi dữ liệu xuống JSP
+            request.setAttribute("movies", movies);
+            request.setAttribute("totalPage", totalPage);
+            request.setAttribute("currentPage", page);
+
+            // Ép kiểu null thành chuỗi rỗng để JSP không bị hiện chữ "null" vào ô tìm kiếm
+            request.setAttribute("currentStatus", status);
+            request.setAttribute("currentKeyword", keywordRaw != null ? keywordRaw : "");
+            request.setAttribute("currentTag", tagRaw != null ? tagRaw : "");
+
+            request.getRequestDispatcher("/views/movie.jsp").forward(request, response);
+
+        } catch (Exception e ) {
+            e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/home");
         }
     }
